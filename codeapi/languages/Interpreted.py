@@ -3,5 +3,6 @@ from codeapi.languages import Language
 
 class Interpreted(Language):
     """
-    Base class of all Interpreted Languages.
+    Interpreter - class which is derived from Translator. All languages
+    which does not need to compile before run should be inherited from this class.
     """
