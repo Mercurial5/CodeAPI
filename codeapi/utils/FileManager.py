@@ -55,5 +55,9 @@ class FileManager:
         return os.path.exists(path_to_dir)
 
     @staticmethod
+    def join(*paths):
+        return os.path.join(*paths)
+
+    @staticmethod
     def __generate_random_name():
         return uuid4().hex
