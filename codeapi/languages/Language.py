@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import os
 
 
 class Language(ABC):
@@ -14,5 +15,8 @@ class Language(ABC):
     > Finding class of the language by name.
     """
 
+    def __init__(self):
+        self.languages_path = os.getenv('LANGUAGES_PATH')
+
     @abstractmethod
-    def run(self) -> str: pass
+    def run(self, filename: str) -> str: pass
