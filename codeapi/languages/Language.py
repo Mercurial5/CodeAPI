@@ -1,4 +1,7 @@
-class Language:
+from abc import ABC, abstractmethod
+
+
+class Language(ABC):
     """
     Language - base class which represents all the languages.
     Each language can be divided into compiler and interpreter based.
@@ -10,3 +13,6 @@ class Language:
     > Name of the separate language directory.
     > Finding class of the language by name.
     """
+
+    @abstractmethod
+    def run(self) -> str: pass
