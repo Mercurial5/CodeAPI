@@ -10,7 +10,7 @@ class FileManager:
 
     def __init__(self, base_path: str):
         if not os.path.exists(base_path):
-            raise ValueError(f"Path {base_path} does not exists")
+            raise ValueError(f'Path {base_path} does not exists')
 
         self.base_path = base_path
 
@@ -21,7 +21,7 @@ class FileManager:
         path_to_file = os.path.join(self.base_path, filename)
 
         if os.path.exists(path_to_file):
-            raise ValueError(f"File {path_to_file} already exists")
+            raise ValueError(f'File {path_to_file} already exists')
 
         with open(path_to_file, 'w') as file:
             file.write(content)
@@ -31,7 +31,7 @@ class FileManager:
     def create_directory(self, dirname: str) -> str:
         path_to_dir = os.path.join(self.base_path, dirname)
         if os.path.exists(path_to_dir):
-            raise ValueError(f"Directory {path_to_dir} already exists")
+            raise ValueError(f'Directory {path_to_dir} already exists')
 
         os.mkdir(path_to_dir)
         return dirname
@@ -39,14 +39,14 @@ class FileManager:
     def delete_file(self, filename: str):
         path_to_file = os.path.join(self.base_path, filename)
         if not os.path.exists(path_to_file):
-            raise ValueError(f"File {path_to_file} does not exists")
+            raise ValueError(f'File {path_to_file} does not exists')
 
         os.remove(path_to_file)
 
     def delete_directory(self, dirname: str):
         path_to_dir = os.path.join(self.base_path, dirname)
         if not os.path.exists(path_to_dir):
-            raise ValueError(f"Directory {path_to_dir} does not exists")
+            raise ValueError(f'Directory {path_to_dir} does not exists')
 
         shutil.rmtree(path_to_dir)
 
