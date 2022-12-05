@@ -1,4 +1,7 @@
-class Executor:
+from abc import ABC, abstractmethod
+
+
+class Executor(ABC):
     """
     Base class for all executors.
 
@@ -6,3 +9,9 @@ class Executor:
     > Shell (Local Machine)
     > Docker (Virtual Machine).
     """
+
+    @abstractmethod
+    def run(self, command: str): pass
+
+    @abstractmethod
+    def communicate(self, data: str): pass
