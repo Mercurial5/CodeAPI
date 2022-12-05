@@ -14,6 +14,8 @@ class Language(ABC):
     > Name of the separate language directory.
     > Finding class of the language by name.
     """
+    name = None
+
 
     def __init__(self):
         self.languages_path = os.getenv('LANGUAGES_PATH')
