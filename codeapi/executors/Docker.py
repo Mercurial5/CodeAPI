@@ -1,4 +1,4 @@
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, TimeoutExpired
 import os
 
 from codeapi.executors import Executor
@@ -24,11 +24,14 @@ class Docker(Executor):
         command = f'docker exec -i {self.container_id} {cmd}'
         self.current_process = Popen(command, shell=True, stdout=PIPE, stderr=PIPE, stdin=PIPE)
 
-    def communicate(self, data: str) -> tuple:
+    def communicate(self, data: str, timeout: int = 2) -> tuple:
         if self.current_process is None:
             raise ValueError('No process is currently running')
 
-        response = self.current_process.communicate(data.encode('utf-8'))
+        try:
+            response = self.current_process.communicate(data.encode('utf-8'), timeout)
+        except TimeoutExpired:
+            return '', 'Timeout'
 
         return response
 
