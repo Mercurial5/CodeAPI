@@ -54,4 +54,4 @@ class Docker(Executor):
 
     def __del__(self):
         command = f'docker rm -f {self.container_id}'
-        # Popen(command, shell=True)
+        Popen(command, shell=True)
