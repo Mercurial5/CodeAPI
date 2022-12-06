@@ -34,7 +34,7 @@ class Docker(Executor):
             response = ''.encode('utf-8'), 'Timeout'.encode('utf-8')
 
         self.__kill_current_process()
-        return response[0].decode('utf-8'), response[1].decode('utf-8')
+        return response[0].decode('utf-8').strip(), response[1].decode('utf-8').strip()
 
     def __kill_current_process(self):
         filename = str(self.current_process.args.split()[5])
@@ -42,7 +42,10 @@ class Docker(Executor):
         process = Popen(command, shell=True, stdout=PIPE)
 
         process_list = [process.split() for process in process.stdout.read().decode('utf-8').split('\n')]
-        pid = next(process[0] for process in process_list if ' '.join(process[4:6]) == f'python {filename}')
+        pid = next((process[0] for process in process_list if ' '.join(process[4:6]) == f'python {filename}'), None)
+
+        if pid is None:
+            return
 
         command = f'docker exec -i {self.container_id} kill {pid}'
         Popen(command, shell=True)
