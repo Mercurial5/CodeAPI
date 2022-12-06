@@ -56,7 +56,7 @@ class FileManager:
 
     @staticmethod
     def join(*paths):
-        return os.path.join(*paths)
+        return os.path.join(*paths).replace("\\", "/")
 
     @staticmethod
     def __generate_random_name():
