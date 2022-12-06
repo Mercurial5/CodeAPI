@@ -5,7 +5,9 @@ from codeapi.executors import Docker
 
 
 def check(lang: str, code: str, weak_inputs: list, weak_outputs: list, strong_inputs: list,
-          strong_outputs: list) -> dict:
+          strong_outputs: list,
+          case_time: float) -> dict:
+    float(case_time)
     if len(weak_inputs) != len(weak_outputs) or len(strong_inputs) != len(strong_outputs):
         raise ValueError('Wrong length of inputs and outputs')
 
