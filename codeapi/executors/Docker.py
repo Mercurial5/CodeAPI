@@ -31,10 +31,24 @@ class Docker(Executor):
         try:
             response = self.current_process.communicate(data.encode('utf-8'), timeout)
         except TimeoutExpired:
-            return '', 'Timeout'
+            response = ''.encode('utf-8'), 'Timeout'.encode('utf-8')
 
-        return response
+        self.__kill_current_process()
+        return response[0].decode('utf-8'), response[1].decode('utf-8')
+
+    def __kill_current_process(self):
+        filename = str(self.current_process.args.split()[5])
+        command = f'docker exec -i {self.container_id} sh -c "ps ax|grep {filename}"'
+        process = Popen(command, shell=True, stdout=PIPE)
+
+        process_list = [process.split() for process in process.stdout.read().decode('utf-8').split('\n')]
+        pid = next(process[0] for process in process_list if ' '.join(process[4:6]) == f'python {filename}')
+
+        command = f'docker exec -i {self.container_id} kill {pid}'
+        Popen(command, shell=True)
+
+        self.current_process = None
 
     def __del__(self):
         command = f'docker rm -f {self.container_id}'
-        Popen(command, shell=True)
+        # Popen(command, shell=True)
