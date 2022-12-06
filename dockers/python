@@ -1,0 +1,4 @@
+FROM python
+WORKDIR /run
+RUN useradd -u 8877 john
+USER john
