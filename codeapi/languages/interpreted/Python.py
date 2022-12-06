@@ -9,11 +9,11 @@ class Python(Interpreted):
     def __init__(self):
         super().__init__()
 
-        file_manager = FileManager(self.languages_path)
-        if not file_manager.is_directory_exists(self.name):
-            file_manager.create_directory(self.name)
+        self.file_manager = FileManager(self.languages_path)
+        if not self.file_manager.is_directory_exists(self.name):
+            self.file_manager.create_directory(self.name)
 
-        self.path = file_manager.join(self.languages_path, self.name)
+        self.path = self.file_manager.join(self.languages_path, self.name)
 
     def run(self, filename: str) -> str:
-        return f'python {filename}'
+        return f'python {self.file_manager.join(self.path, filename)}'
