@@ -44,7 +44,7 @@ def check(lang: str, code: str, weak_inputs: list, weak_outputs: list, strong_in
     file_manager.delete_file(filename)
 
     if stderr:
-        return dict(status=False, reason='RE', description=stderr)
+        return dict(status=False, reason=stdout, description=stderr)
 
     outputs = StringTools.parse_outputs(stdout)
     for index, (output_user, output_answer) in enumerate(zip(outputs, strong_outputs), start=1):
