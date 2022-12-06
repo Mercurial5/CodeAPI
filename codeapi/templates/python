@@ -1,4 +1,10 @@
 import sys, os
+import signal
+from subprocess import TimeoutExpired
+
+def signal_handler(signum, frame):
+    raise Exception("Timed out!")
+#lambda signum, frame: raise_(Exception('Timed out!'))
 
 exit = 1
 quit = 1
@@ -7,6 +13,14 @@ sys.exit = 1
 i = 0
 for _ in range({iterations_number}):
 
-    {code}
+    signal.signal(signal.SIGALRM, signal_handler)
+    signal.setitimer(signal.ITIMER_REAL, {case_time}, {case_time})
+
+    try:
+        {code}
+    except Exception as msg:
+        raise TimeoutExpired('case', 0)
+
+    signal.setitimer(signal.ITIMER_REAL, 0)
 
     print('{case_delimiter}')
