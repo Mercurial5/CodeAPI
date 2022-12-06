@@ -18,7 +18,7 @@ class StringTools:
 
     @staticmethod
     def parse_outputs(outputs: str) -> list:
-        outputs = outputs.split('CASE_DELIMITER')
+        outputs = outputs.split(os.getenv('CASE_DELIMITER'))[:-1]
         outputs = [output.strip() for output in outputs]
 
         return outputs
