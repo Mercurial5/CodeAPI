@@ -16,4 +16,4 @@ class Python(Interpreted):
         self.path = self.file_manager.join(self.languages_path, self.name)
 
     def run(self, filename: str) -> str:
-        return f'python {self.file_manager.join(self.path, filename)}'
+        return f'python {filename}'
