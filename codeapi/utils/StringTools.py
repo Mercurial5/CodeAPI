@@ -3,7 +3,7 @@ import os
 
 class StringTools:
     """
-    Class that manages +- complex string operations.
+    Class that manages +- complex string operations. Here
     """
 
     @staticmethod
