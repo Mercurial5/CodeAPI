@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
@@ -6,7 +7,7 @@ from codeapi.api import app
 
 
 def main():
-    app.run()
+    app.run(host=os.getenv('FLASK_HOST'), port=os.getenv('FLASK_PART'))
 
 
 if __name__ == '__main__':
