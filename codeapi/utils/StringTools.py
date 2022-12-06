@@ -12,7 +12,7 @@ class StringTools:
             template = file.read()
 
         code = template.format(iterations_number=iterations_number, code='    '.join(code.splitlines(True)),
-                               case_delimeter=os.getenv('CASE_DELIMITER'))
+                               case_delimiter=os.getenv('CASE_DELIMITER'))
 
         return code
 
