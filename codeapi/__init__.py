@@ -5,7 +5,9 @@ from codeapi.executors import Docker
 
 
 def check(lang: str, code: str, weak_inputs: list, weak_outputs: list, strong_inputs: list,
-          strong_outputs: list) -> dict:
+          strong_outputs: list,
+          case_time: float) -> dict:
+    float(case_time)
     if len(weak_inputs) != len(weak_outputs) or len(strong_inputs) != len(strong_outputs):
         raise ValueError('Wrong length of inputs and outputs')
 
@@ -32,21 +34,24 @@ def check(lang: str, code: str, weak_inputs: list, weak_outputs: list, strong_in
     file_manager.delete_file(filename)
 
     # Building new code with template to check a lot of cases with one run
-    code = StringTools.build_template(template_name=language.name, code=code, iterations_number=len(strong_inputs))
+    code = StringTools.build_template(template_name=language.name, timeout_seconds=case_time, code=code, iterations_number=len(strong_inputs))
 
     filename = file_manager.create_file(code, extension=language.extension)
     container_path_to_file = file_manager.join(docker.path_to_container_volume, language.name, filename)
     docker.run(language.run(container_path_to_file))
 
-    stdout, stderr = docker.communicate('\n'.join(strong_inputs))
+    stdout, stderr = docker.communicate('\n'.join(strong_inputs), 10)
     file_manager.delete_file(filename)
 
     if stderr:
-        return dict(status=False, reason='RE', description=stderr)
+        return dict(status=False, reason=stdout, description=stderr)
 
     outputs = StringTools.parse_outputs(stdout)
     for index, (output_user, output_answer) in enumerate(zip(outputs, strong_outputs), start=1):
-        if output_user != output_answer:
-            return dict(status=False, reason='WA', case=len(weak_inputs) + index)
+        if output_user['status']:
+            if output_user['answer'] != output_answer:
+                return dict(status=False, reason='WA', case=len(weak_inputs) + index)
+        else:
+            return dict(status=False, reason=output_user['error'], case=len(weak_inputs) + index)
 
     return dict(status=True)

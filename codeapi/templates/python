@@ -1,4 +1,12 @@
 import sys, os
+import signal
+
+class SuperSecretTimeOutException(Exception):
+    pass
+
+def signal_handler(signum, frame):
+    raise SuperSecretTimeOutException('{timeout_error_message}')
+
 
 exit = 1
 quit = 1
@@ -7,6 +15,16 @@ sys.exit = 1
 i = 0
 for _ in range({iterations_number}):
 
-    {code}
+    signal.signal(signal.SIGALRM, signal_handler)
+    signal.setitimer(signal.ITIMER_REAL, {case_time}, {case_time})
 
-    print('{case_delimiter}')
+    try:
+        {code}
+    except SuperSecretTimeOutException as msg:
+        print(msg)
+        break
+    finally:
+        print('{case_delimiter}')
+
+    signal.setitimer(signal.ITIMER_REAL, 0)
+
