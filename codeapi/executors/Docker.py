@@ -30,11 +30,8 @@ class Docker(Executor):
 
         try:
             response = self.current_process.communicate(data.encode('utf-8'), timeout)
-            print(response[1].decode('utf-8').strip())
-            if 'raise Exception(\"Timed out!\")' in response[1].decode('utf-8').strip():
-                response = 'TL'.encode('utf-8'), 'Timeout'.encode('utf-8')
         except TimeoutExpired:
-            response = 'RE'.encode('utf-8'), 'Timeout'.encode('utf-8')
+            response = ''.encode('utf-8'), 'Timeout'.encode('utf-8')
 
         self.__kill_current_process()
         return response[0].decode('utf-8').strip(), response[1].decode('utf-8').strip()

@@ -40,7 +40,7 @@ def check(lang: str, code: str, weak_inputs: list, weak_outputs: list, strong_in
     container_path_to_file = file_manager.join(docker.path_to_container_volume, language.name, filename)
     docker.run(language.run(container_path_to_file))
 
-    stdout, stderr = docker.communicate('\n'.join(strong_inputs))
+    stdout, stderr = docker.communicate('\n'.join(strong_inputs), 10)
     file_manager.delete_file(filename)
 
     if stderr:
@@ -48,7 +48,10 @@ def check(lang: str, code: str, weak_inputs: list, weak_outputs: list, strong_in
 
     outputs = StringTools.parse_outputs(stdout)
     for index, (output_user, output_answer) in enumerate(zip(outputs, strong_outputs), start=1):
-        if output_user != output_answer:
-            return dict(status=False, reason='WA', case=len(weak_inputs) + index)
+        if output_user['status']:
+            if output_user != output_answer:
+                return dict(status=False, reason='WA', case=len(weak_inputs) + index)
+        else:
+            return dict(status=False, reason=output_user['error'], case=len(weak_inputs) + index)
 
     return dict(status=True)
