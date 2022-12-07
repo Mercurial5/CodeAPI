@@ -15,8 +15,11 @@ class Docker(Executor):
 
         command = f'docker run -i -dv {self.path_to_host_volume}:{self.path_to_container_volume}:ro {image}'
 
-        process = Popen(command, shell=True, stdout=PIPE)
+        process = Popen(command, shell=True, stdout=PIPE, stderr=PIPE)
         self.container_id = process.stdout.read().decode('utf-8').strip()
+
+        if process.stderr.read().decode('utf-8').strip():
+            raise SystemError('Docker Issue')
 
         self.current_process: Popen | None = None
 
@@ -37,6 +40,7 @@ class Docker(Executor):
         return response[0].decode('utf-8').strip(), response[1].decode('utf-8').strip()
 
     def __kill_current_process(self):
+        print(self.current_process.args)
         filename = str(self.current_process.args.split()[5])
         command = f'docker exec -i {self.container_id} sh -c "ps ax|grep {filename}"'
         process = Popen(command, shell=True, stdout=PIPE)
