@@ -40,7 +40,6 @@ class Docker(Executor):
         return response[0].decode('utf-8').strip(), response[1].decode('utf-8').strip()
 
     def __kill_current_process(self):
-        print(self.current_process.args)
         filename = str(self.current_process.args.split()[5])
         command = f'docker exec -i {self.container_id} sh -c "ps ax|grep {filename}"'
         process = Popen(command, shell=True, stdout=PIPE)
