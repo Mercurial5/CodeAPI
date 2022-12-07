@@ -49,7 +49,7 @@ def check(lang: str, code: str, weak_inputs: list, weak_outputs: list, strong_in
     outputs = StringTools.parse_outputs(stdout)
     for index, (output_user, output_answer) in enumerate(zip(outputs, strong_outputs), start=1):
         if output_user['status']:
-            if output_user != output_answer:
+            if output_user['answer'] != output_answer:
                 return dict(status=False, reason='WA', case=len(weak_inputs) + index)
         else:
             return dict(status=False, reason=output_user['error'], case=len(weak_inputs) + index)
