@@ -27,5 +27,3 @@ def run():
         return result
     except ValueError as e:
         return dict(status=False, reason='error', error=str(e))
-    except TypeError as e:
-        return dict(status=False, reason='error', error=str(e))
