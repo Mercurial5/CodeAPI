@@ -23,7 +23,6 @@ def run():
         return dict(status=False, reason='case_time should be float')
 
     try:
-        result = check(lang, code, weak_inputs, weak_outputs, strong_inputs, strong_outputs, case_time)
-        return result
+        return check(lang, code, weak_inputs, weak_outputs, strong_inputs, strong_outputs, case_time)
     except ValueError as e:
         return dict(status=False, reason='error', error=str(e))
