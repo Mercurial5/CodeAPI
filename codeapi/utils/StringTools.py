@@ -11,11 +11,10 @@ class StringTools:
         with open(f'codeapi/templates/{template_name}', 'r') as file:
             template = file.read()
 
-        code = template.format(iterations_number=iterations_number,
-                               case_time=timeout_seconds,
-                               code='        '.join(code.splitlines(True)),
-                               case_delimiter=os.getenv('CASE_DELIMITER'),
-                               timeout_error_message=os.getenv('TIMEOUT_ERROR_MESSAGE'))
+        code = template.format(iterations_number=iterations_number, case_time=timeout_seconds,
+                               code='\t\t'.join(code.splitlines(True)),
+                               case_delimiter=os.getenv('CASE_DELIMITER', 'case-delimiter'),
+                               timeout_error_message=os.getenv('TIMEOUT_ERROR_MESSAGE', 'timeout-error-message'))
 
         return code
 
