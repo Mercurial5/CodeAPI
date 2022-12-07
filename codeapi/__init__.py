@@ -4,10 +4,8 @@ from codeapi.utils import FileManager
 from codeapi.executors import Docker
 
 
-def check(lang: str, code: str, weak_inputs: list, weak_outputs: list, strong_inputs: list,
-          strong_outputs: list,
+def check(lang: str, code: str, weak_inputs: list, weak_outputs: list, strong_inputs: list, strong_outputs: list,
           case_time: float) -> dict:
-    float(case_time)
     if len(weak_inputs) != len(weak_outputs) or len(strong_inputs) != len(strong_outputs):
         raise ValueError('Wrong length of inputs and outputs')
 
@@ -34,7 +32,8 @@ def check(lang: str, code: str, weak_inputs: list, weak_outputs: list, strong_in
     file_manager.delete_file(filename)
 
     # Building new code with template to check a lot of cases with one run
-    code = StringTools.build_template(template_name=language.name, timeout_seconds=case_time, code=code, iterations_number=len(strong_inputs))
+    code = StringTools.build_template(template_name=language.name, timeout_seconds=case_time, code=code,
+                                      iterations_number=len(strong_inputs))
 
     filename = file_manager.create_file(code, extension=language.extension)
     container_path_to_file = file_manager.join(docker.path_to_container_volume, language.name, filename)
