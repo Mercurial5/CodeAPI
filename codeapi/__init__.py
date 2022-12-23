@@ -4,6 +4,30 @@ from codeapi.utils import FileManager
 from codeapi.executors import Docker
 
 
+reasons = {
+    'WA': 'Wrong Answer',
+    'TL': 'Time Limited',
+    'RE': 'Runtime Error',
+}
+
+
+"""
+    This function building console output string
+    (reason, stderr, stdout)
+"""
+def build_console_output(stderr: str, stdout: str, case: int, input: str, output: str) -> str:
+    text = ''
+    text += 'What is wrong:\n'
+    text += 'In ' + str(case) + ' case, you printed \'' + input + '\' instead of \'' + output + '\''
+    text += '\n\n\n'
+    text += 'Error standard stream:\n'
+    text += stderr
+    text += '\n\n\n'
+    text += 'Output standard stream:\n'
+    text += stdout
+    return text
+
+
 def check(lang: str, code: str, weak_inputs: list, weak_outputs: list, strong_inputs: list, strong_outputs: list,
           case_time: float) -> dict:
     if len(weak_inputs) != len(weak_outputs) or len(strong_inputs) != len(strong_outputs):
@@ -40,12 +64,13 @@ def check_weak_cases(language: Language, code: str, file_manager: FileManager, d
 
         result = None
         if stderr == 'Timeout':
-            result = dict(status=False, reason='TL', case=index)
+            result = dict(status=False, reason=reasons['TL'], case=index)
         elif stderr:
-            result = dict(status=False, reason='RE', description=stderr)
+            result = dict(status=False, reason=reasons['RE'], description=stderr)
 
         if stdout != output_case:
-            result = dict(status=False, reason='WA', case=index)
+            description = build_console_output(stderr, stdout, index, stdout, output_case)
+            result = dict(status=False, reason=reasons['WA'], case=index, description=description)
 
         if result is not None:
             file_manager.delete_file(filename)
@@ -72,7 +97,9 @@ def check_strong_cases(language: Language, code: str, file_manager: FileManager,
     for index, (output_user, output_answer) in enumerate(zip(user_outputs, outputs), start=1):
         if output_user['status']:
             if output_user['answer'] != output_answer:
-                return dict(status=False, reason='WA', case=case_shift + index)
+                case = case_shift + index
+                description = build_console_output(stderr, stdout, case, output_user['answer'], output_answer)
+                return dict(status=False, reason=reasons['WA'], case=case, description=description)
         else:
             return dict(status=False, reason=output_user['error'], case=case_shift + index)
 
