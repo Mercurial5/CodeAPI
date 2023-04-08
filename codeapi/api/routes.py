@@ -6,13 +6,13 @@ from codeapi import check
 
 @app.route('/run', methods=['POST'])
 def run():
-    lang = request.form.get('lang')
-    code = request.form.get('code')
-    weak_inputs = request.form.getlist('weak_inputs')
-    weak_outputs = request.form.getlist('weak_outputs')
-    strong_inputs = request.form.getlist('strong_inputs')
-    strong_outputs = request.form.getlist('strong_outputs')
-    case_time = request.form.get('case_time')
+    lang = request.json.get('lang')
+    code = request.json.get('code')
+    weak_inputs = request.json.get('weak_inputs')
+    weak_outputs = request.json.get('weak_outputs')
+    strong_inputs = request.json.get('strong_inputs', [])
+    strong_outputs = request.json.get('strong_outputs', [])
+    case_time = request.json.get('case_time')
 
     if None in (lang, code, weak_inputs, weak_outputs, strong_inputs, strong_outputs, case_time):
         return dict(status=False, reason='Not all data was given')
