@@ -1,8 +1,7 @@
-from codeapi.languages import Language
-from codeapi.utils import StringTools
-from codeapi.utils import FileManager
 from codeapi.executors import Docker
-
+from codeapi.languages import Language
+from codeapi.utils import FileManager
+from codeapi.utils import StringTools
 
 reasons = {
     'WA': 'Wrong Answer',
@@ -10,11 +9,12 @@ reasons = {
     'RE': 'Runtime Error',
 }
 
-
 """
     This function building console output string
     (reason, stderr, stdout)
 """
+
+
 def build_console_output(stderr: str, stdout: str, case: int, input: str, output: str) -> str:
     text = ''
     text += 'What is wrong:\n'
@@ -35,7 +35,7 @@ def check(lang: str, code: str, weak_inputs: list, weak_outputs: list, strong_in
 
     language = Language.get_language_by_name(lang)
 
-    docker = Docker(language.name)
+    docker = Docker(language.name + '_image')
 
     file_manager = FileManager(language.path)
 
