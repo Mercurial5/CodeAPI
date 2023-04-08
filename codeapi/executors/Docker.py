@@ -18,8 +18,9 @@ class Docker(Executor):
         process = Popen(command, shell=True, stdout=PIPE, stderr=PIPE)
         self.container_id = process.stdout.read().decode('utf-8').strip()
 
-        if process.stderr.read().decode('utf-8').strip():
-            raise SystemError('Docker Issue')
+        exception = process.stderr.read().decode('utf-8').strip()
+        if exception:
+            raise SystemError(f'Docker Issue - {exception}')
 
         self.current_process: Popen | None = None
 
