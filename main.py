@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from codeapi.consumer import start
+from codeapi.api import app
 
 if __name__ == '__main__':
-    start()
+    app.run(host='0.0.0.0', port=8854)

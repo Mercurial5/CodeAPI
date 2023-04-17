@@ -6,7 +6,7 @@ from codeapi.database import Verdict, PostgresDatabase
 
 
 def process_code(body: dict) -> dict:
-    lang = body.get('lang')
+    language = body.get('language')
     code = body.get('code')
     weak_inputs = body.get('weak_inputs')
     weak_outputs = body.get('weak_outputs')
@@ -14,7 +14,8 @@ def process_code(body: dict) -> dict:
     strong_outputs = body.get('strong_outputs', [])
     case_time = body.get('case_time')
 
-    if None in (lang, code, weak_inputs, weak_outputs, strong_inputs, strong_outputs, case_time):
+    print(language, code, weak_inputs, weak_outputs, strong_inputs, strong_outputs, case_time)
+    if None in (language, code, weak_inputs, weak_outputs, strong_inputs, strong_outputs, case_time):
         return dict(status=False, reason='Not all data was given')
 
     try:
@@ -23,7 +24,7 @@ def process_code(body: dict) -> dict:
         return dict(status=False, reason='case_time should be float')
 
     try:
-        return check(lang, code, weak_inputs, weak_outputs, strong_inputs, strong_outputs, case_time)
+        return check(language, code, weak_inputs, weak_outputs, strong_inputs, strong_outputs, case_time)
     except ValueError as e:
         return dict(status=False, reason='error', error=str(e))
 
